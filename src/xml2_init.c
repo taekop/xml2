@@ -22,10 +22,19 @@ void handleStructuredError(void* userData, xmlError* error) {
     error->message[len-1] = '\0';
   }
 
+  xmlParserCtxt *ctxt = error->ctxt;
+
+  if (error->level <= 2 && ctxt &&
+      (error->domain == XML_FROM_PARSER ||
+       error->domain == XML_FROM_NAMESPACE ||
+       error->domain == XML_FROM_HTML) &&
+      (ctxt->options & XML_PARSE_NOWARNING)) {
+    return;
+  }
+
   //Workarounds for xml bugs in R.app https://github.com/r-lib/xml2/issues/458
   //Another solution is to use a static libxml2
 #ifdef __APPLE__
-  xmlParserCtxt *ctxt = error->ctxt;
   static unsigned char icns[5] = { 'i', 'c', 'n', 's', '\0' };
   static unsigned char mm[3] = { 'M', 'M', '\0' };
   if(error->code == XML_ERR_DOCUMENT_EMPTY && ctxt->input && ctxt->input->base){
