@@ -107,6 +107,40 @@ test_that("url_parse", {
       stringsAsFactors = FALSE
     )
   )
+
+  expect_equal(
+    url_parse("https://www.spa.cz/procedures/Slatinn\u00e1%20koupel.jpg"),
+    data.frame(
+      scheme = "https",
+      server = "www.spa.cz",
+      port = NA_integer_,
+      user = "",
+      path = "/procedures/Slatinn\u00e1 koupel.jpg",
+      query = "",
+      fragment = "",
+      stringsAsFactors = FALSE
+    )
+  )
+
+  expect_equal(
+    url_parse("http://had.co.nz/a b?x=1"),
+    data.frame(
+      scheme = "http",
+      server = "had.co.nz",
+      port = NA_integer_,
+      user = "",
+      path = "/a b",
+      query = "x=1",
+      fragment = "",
+      stringsAsFactors = FALSE
+    )
+  )
+})
+
+test_that("url_parse returns NA port for unparseable URLs", {
+  out <- url_parse(c("http://had.co.nz/", "http://had.co.nz:abc/"))
+  expect_equal(out$server, c("had.co.nz", ""))
+  expect_equal(out$port, c(NA_integer_, NA_integer_))
 })
 
 test_that("url_escape", {

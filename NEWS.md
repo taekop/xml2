@@ -1,3 +1,9 @@
+# xml2 (development version)
+
+* `url_parse()` now parses URLs containing characters that are not allowed in
+  a URI, such as spaces and non-ASCII characters, instead of returning
+  uninitialised values for `port` (#442, @taekop).
+
 # xml2 1.6.0
 
 * `xml_add_child()` without `.where` argument is now much faster. The default
