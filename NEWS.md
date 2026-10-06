@@ -1,8 +1,8 @@
 # xml2 (development version)
 
-* `url_parse()` now parses URLs containing characters that are not allowed in
-  a URI, such as spaces and non-ASCII characters, instead of returning
-  uninitialised values for `port` (#442, @taekop).
+* `url_parse()` now returns `NA` for `port` when a URL can't be parsed,
+  for example because it contains a space or a non-ASCII character, instead of
+  an uninitialised value (#442, @taekop).
 
 # xml2 1.6.0
 

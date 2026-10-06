@@ -59,14 +59,6 @@ extern "C" SEXP url_parse_(SEXP x_sxp) {
     const char* raw = Rf_translateCharUTF8(STRING_ELT(x_sxp, i));
     xmlURI* uri = xmlParseURI(raw);
     if (uri == NULL) {
-      // Retry with characters that are not allowed in a URI percent-encoded
-      xmlChar* escaped = xmlURIEscapeStr((const xmlChar*) raw, (const xmlChar*) "@/:=?;#%&,+[]");
-      if (escaped != NULL) {
-        uri = xmlParseURI((const char*) escaped);
-        xmlFree(escaped);
-      }
-    }
-    if (uri == NULL) {
       INTEGER(port)[i] = NA_INTEGER;
       continue;
     }
